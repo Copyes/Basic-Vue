@@ -9,12 +9,12 @@ export class Dep {
   // 通知watcher
   notify() {
     for (let i = 0; i < this.subs.length; ++i) {
-      this.subs[i].handle()
+      this.subs[i].fn()
     }
   }
 }
 Dep.target = null
 
-export const parseTarget = watch => {
+export const pushTarget = watch => {
   Dep.target = watch
 }

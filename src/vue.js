@@ -1,20 +1,24 @@
 import Watch from './watcher'
-import { observer } from './observer'
+import { observer } from './observer.js'
+
 var data = {
   a: 1,
   b: {
     c: 2
   }
 }
-new Watch('a', () => {
+// 这里就把所有的属性劫持，监听了
+observer(data)
+
+new Watch(data, 'a', () => {
   console.log(9)
 })
 
-new Watch('a', () => {
+new Watch(data, 'a', () => {
   console.log(90)
 })
 
-new Watch('b.c', () => {
+new Watch(data, 'b.c', () => {
   console.log(80)
 })
 

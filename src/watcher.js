@@ -1,5 +1,4 @@
-import { parseTarget } from './dep.js'
-
+import { pushTarget } from './dep.js'
 export default class Watcher {
   constructor(data, exp, fn) {
     this.exp = exp

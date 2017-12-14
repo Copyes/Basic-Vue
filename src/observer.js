@@ -1,4 +1,4 @@
-import Dep from './dep.js'
+import { Dep } from './dep.js'
 
 const defineReactive = (data, key, val) => {
   observer(val)
@@ -21,9 +21,9 @@ const defineReactive = (data, key, val) => {
 }
 export const observer = data => {
   if (Object.prototype.toString.call(data) !== '[object Object]') {
-    new Observer(data)
+    return
   }
-  return
+  new Observer(data)
 }
 export class Observer {
   constructor(data) {
