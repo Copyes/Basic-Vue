@@ -1,4 +1,4 @@
-import { observer } from './observer.js'
+import { observe } from './observer'
 
 export function initState(vm) {
   const opts = vm.$options
@@ -21,7 +21,6 @@ export function proxy(vm, key) {
 function initData(vm) {
   let data = vm.$options.data
   data = vm._data = typeof data === 'function' ? getData(data, vm) : data || {}
-
   if (Object.prototype.toString.call(data) !== '[object Object]') {
     throw new Error('data functions should return an object')
   }
@@ -31,6 +30,7 @@ function initData(vm) {
     let key = keys[i]
     proxy(vm, key)
   }
+  observe(data)
 }
 
 const getData = (data, vm) => {

@@ -1,7 +1,8 @@
 import { Dep } from './dep.js'
+import { hasOwn, def } from '../util.js'
 
 const defineReactive = (data, key, val) => {
-  observer(val)
+  observe(val)
   let dep = new Dep()
   Object.defineProperty(data, key, {
     enumerable: true,
@@ -14,20 +15,31 @@ const defineReactive = (data, key, val) => {
       if (newVal === val) {
         return
       }
-      observer(newVal)
+      observe(newVal)
       dep.notify()
     }
   })
 }
-export const observer = data => {
-  if (Object.prototype.toString.call(data) !== '[object Object]') {
+
+export const observe = value => {
+  if (Object.prototype.toString.call(value) !== '[object Object]') {
     return
   }
-  new Observer(data)
+  let ob
+  if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
+    ob = value.__ob__
+  } else {
+    ob = new Observer(value)
+  }
+  return ob
 }
+// 只处理了普通对象，没有处理数组，后期会加上
 export class Observer {
-  constructor(data) {
-    this.walk(data)
+  constructor(value) {
+    this.value = value
+    this.dep = new Dep()
+    def(value, '__ob__', this)
+    this.walk(value)
   }
   walk(data) {
     let keys = Object.keys(data)
